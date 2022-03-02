@@ -5,4 +5,5 @@ int environ();
 void echo();
 int help();
 int pause();
+int makedir();
 int quit();

@@ -25,6 +25,9 @@ int dir()
 int environ(char *envp[])
 {
     // looping through and printing all environment variables
+    char cwd[1024];
+    getcwd(cwd, sizeof(cwd));
+    setenv("PWD", cwd, 1);
     for(int i = 0; envp[i] != NULL; ++i)
     {
         printf("\n%s", envp[i]);
@@ -50,6 +53,32 @@ int pause()
 {   // wait for a userinput
     printf("Press Enter to unpause the shell...");
     getchar(); // wait for user to input enter
+}
+
+// function that creates directories in current working directory
+int makedir(char *args[])
+{
+
+    // if no dirname given print an error message
+    if(args[1] == NULL)
+    {
+        printf("Error, please provide a name for the directory.\n");
+    }
+    // else create a directory in the current directory with the given name
+    else
+    {
+        int check = mkdir(args[1], 777);
+
+        // check if the directory has been created
+        if(check == 0)
+        {
+            printf("Created \"%s\" directory.\n", args[1]);
+        }
+        else
+        {
+            printf("Error, directory \"%s\" already exists.\n", args[1]);
+        }
+    }
 }
 
 int quit()

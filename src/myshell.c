@@ -86,11 +86,16 @@ int main (int argc, char ** argv, char *envp[])
                     continue;
                 }
 
+                if (!strcmp(args[0],"mkdir"))
+                {
+                    makedir(args);
+                    continue;
+                }
+
                 if (!strcmp(args[0],"quit"))   
                 {   // quit shell command
                     quit();
                 }
-
                 else
                 {   // if the command does not exist then print the following
                     printf("Error, no command \"%s\" found.\n", args[0]);
