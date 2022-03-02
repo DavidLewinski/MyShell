@@ -13,18 +13,27 @@ Synopsis
     MyShell
 
 Description
-    MyShell is a personal project created by Dawid Lewinski. It provides some basice functionality that can execute commands much like commonly found on Operating Systems such as Ubuntu.
+    MyShell is a personal project created by Dawid Lewinski. It provides some basic
+    functionality that can execute commands much like commonly found on Operating System
+    such as Ubuntu.
 
 Here are all the possible commands available for this shell:
 
     cd      - This command changes current working directory of the user to their desired
-              path. User may enter the "cd" command followed by either a "../" to indicate that the user wants to go back from their current working directory or a "./" to indicate that the user wants to move somewhere within their current working directory. The user may also input their desired path, if the user inputs no arguments following the command then the current working directory will be displayed.
+              path. User may enter the "cd" command followed by either a "../" to indicate
+              that the user wants to go back from their current working directory or a "./"
+              to indicate that the user wants to move somewhere within their current working
+              directory. The user may also input their desired path, if the user inputs no
+              arguments following the command then the current working directory will be
+              displayed.
 
     clr     - This will clear the users screen, essentially clearing the executed command
               history.
 
     dir     - This command will list all the files and directories in either the current
-              current working directory provided no following argument is given, or if a existing directory is given as a arguemnt then it will list that directories files and directories.
+              current working directory provided no following argument is given, or if a
+              existing directory is given as a arguemnt then it will list that directories
+              files and directories.
 
     environ - This command will print all environment variables.
 

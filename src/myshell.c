@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 #include <string.h>
-#include "functions.h"
+#include <sys/wait.h>
 #include "commands.h"
+#include "functions.h"
 
 #define MAX_BUFFER 1024                        // max line buffer
 #define MAX_ARGS 64                            // max # args
@@ -21,6 +23,30 @@ int main (int argc, char ** argv, char *envp[])
     setenv("SHELL", shell, 1); // set the old environment variable to new shell variable
 
     welcome();
+
+    if(argc == 2)
+    {
+        FILE *batchfile;
+        char c[100];
+
+        batchfile = fopen(argv[1], "r"); // open the batchfile
+
+        if(batchfile == NULL) // if it is empty inform the user no commands are inputted
+        {
+            printf("Error: no commands supplied.");
+        }
+        else
+        {
+            while(fgets(c, sizeof(c), batchfile) != NULL) // while not at the end of the file
+            {
+                char ** command = split_line(c); // parse the line using the split_line function as if the command was taken from the shell prompt
+                execute(command); // run the execute function to run the commands on each line
+                printf("\n");
+            }
+        }
+
+        fclose(batchfile); // close the batchfile containing the commands
+    }
 
     /* keep reading input until "quit" command or eof of redirected input */
     while (!feof(stdin))
@@ -40,15 +66,17 @@ int main (int argc, char ** argv, char *envp[])
             while((*arg++ = strtok(NULL,SEPARATORS)));
 
             // last entry will be NULL
-            if (args[0])
+            if (args[0] != NULL)
             {
+                // execute(args);
+                // continue;
                 // if there's anything there
                 /* check for internal/external command */
                 if (!strcmp(args[0],"cd"))
-                {   // change directory command
-                    cd(args);
-                    continue;
-                }
+                    {   // change directory command
+                        cd(args);
+                        continue;
+                    }
 
                 if (!strcmp(args[0],"clr"))
                 {   // clear terminal command
@@ -95,17 +123,21 @@ int main (int argc, char ** argv, char *envp[])
                 if (!strcmp(args[0],"quit"))   
                 {   // quit shell command
                     quit();
+                    continue;
                 }
                 else
                 {   // if the command does not exist then print the following
-                    printf("Error, no command \"%s\" found.\n", args[0]);
+                    printf("Error, command \"%s\" not found.\n", args[0]);
                     continue;
                 }
+
+                continue;
             }   // if no input command then continue
             else
             {
                 continue;
             }
+            continue;
         }
     }
 }

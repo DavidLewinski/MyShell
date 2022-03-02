@@ -47,6 +47,7 @@ void echo(char *args[])
 int help()
 {   // print the readme file in manual folder
     system("cat ../manual/readme.md");
+    printf("\n");
 }
 
 int pause()
