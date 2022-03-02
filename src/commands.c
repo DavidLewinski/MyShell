@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
+#define MAX_BUFFER 1024
+
 int cd(char *args[])
 {
     char cwd[1024];
@@ -25,14 +27,15 @@ int dir()
 int environ(char *envp[])
 {
     // looping through and printing all environment variables
-    char cwd[1024];
+    char cwd[MAX_BUFFER];
     getcwd(cwd, sizeof(cwd));
     setenv("PWD", cwd, 1);
-    for(int i = 0; envp[i] != NULL; ++i)
-    {
-        printf("\n%s", envp[i]);
-    }
-    printf("\n");
+    system("env");
+    // for(int i = 0; envp[i] != NULL; ++i)
+    // {
+    //     printf("\n%s", envp[i]);
+    // }
+    // printf("\n");
 }
 
 void echo(char *args[])

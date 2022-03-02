@@ -6,6 +6,8 @@
 #include <sys/wait.h>
 #include "commands.h"
 
+#define MAX_BUFFER 1024
+#define MAX_ARGS 64
 #define SEPARATORS " \t\n"
 
 void welcome() 
@@ -35,11 +37,11 @@ void welcome()
 
 void prompt()
 {
-    char cwd[1024];
+    char cwd[MAX_BUFFER];
     char* name = getenv("NAME");
     char* username = getenv("USER");
     getcwd(cwd, sizeof(cwd)); // gets the current working dir
-    printf("%s@%s:%s$ ", name, username, cwd); // prints the cwd then the prompt
+    printf("%s@%s:%s$ ", username, name, cwd); // prints the cwd then the prompt
 }
 
 int execute(char **args, char *envp[])
@@ -51,82 +53,106 @@ int execute(char **args, char *envp[])
             cd(args);
         }
 
-    if (!strcmp(args[0],"clr"))
+    else if (!strcmp(args[0],"clr"))
     {   // clear terminal command
         clr();
     }
 
-    if (!strcmp(args[0],"dir"))
+    else if (!strcmp(args[0],"dir"))
     {   // list directory command
         dir();
     }
 
-    if (!strcmp(args[0],"environ"))
+    else if (!strcmp(args[0],"environ"))
     {   // get environment command
         environ(envp);
     }
 
-    if (!strcmp(args[0],"echo"))
+    else if (!strcmp(args[0],"echo"))
     {   // echo command
         echo(args);
     }
 
-    if (!strcmp(args[0], "help"))
+    else if (!strcmp(args[0], "help"))
     {   // print readme file
         help();
     }
 
-    if (!strcmp(args[0], "pause"))
+    else if (!strcmp(args[0], "pause"))
     {   // pause shell command
         pause();
     }
 
-    if (!strcmp(args[0],"mkdir"))
+    else if (!strcmp(args[0],"mkdir"))
     {
         makedir(args);
     }
 
-    if (!strcmp(args[0],"quit"))   
+    else if (!strcmp(args[0],"quit"))   
     {   // quit shell command
         quit();
     }
-    if ((args[0]) == NULL)
+
+    else
     {   // if the command does not exist then print the following
         printf("Error, command \"%s\" not found.\n", args[0]);
     }
 }
 
+// char **split_line(char *line)
+// {
+//   int bufsize = 64, position = 0;
+//   char **tokens = malloc(MAX_BUFFER);
+//   char *token;
+
+//     if (!tokens)
+//     {
+//         fprintf(stderr, "lsh: allocation error\n");
+//         exit(EXIT_FAILURE);
+//     }
+
+//     token = strtok(line, SEPARATORS);
+//     while (token != NULL)
+//     {
+//         tokens[position] = token;
+//         position++;
+
+//         if (position >= bufsize)
+//         {
+//             bufsize += 64;
+//             tokens = realloc(tokens, bufsize * sizeof(char*));
+//             if (!tokens)
+//             {
+//                 fprintf(stderr, "lsh: allocation error\n");
+//                 exit(EXIT_FAILURE);
+//             }
+//         }
+//         token = strtok(NULL, SEPARATORS);
+//     }
+//     tokens[position] = NULL;
+//     return tokens;
+// }
+
 char **split_line(char *line)
 {
-  int bufsize = 64, position = 0;
-  char **tokens = malloc(bufsize * sizeof(char*));
-  char *token;
-
-  if (!tokens)
-  {
-    fprintf(stderr, "lsh: allocation error\n");
-    exit(EXIT_FAILURE);
-  }
-
-  token = strtok(line, SEPARATORS);
-  while (token != NULL)
-  {
-    tokens[position] = token;
-    position++;
-
-    if (position >= bufsize)
+    char *token;
+    char **tokens = malloc(MAX_BUFFER);
+    int i = 0, MAXB = 64;
+    token = strtok(line, SEPARATORS);
+    for (i; token != NULL; ++i)
     {
-      bufsize += 64;
-      tokens = realloc(tokens, bufsize * sizeof(char*));
-      if (!tokens)
-      {
-        fprintf(stderr, "lsh: allocation error\n");
-        exit(EXIT_FAILURE);
-      }
-    }
+        tokens[i] = token;
 
+        if (i >= MAXB)
+        {
+            MAXB += 64;
+            if (!tokens)
+            {
+                fprintf(stderr, "lsh: allocation error\n");
+            }
+        }
     token = strtok(NULL, SEPARATORS);
-  }
-  tokens[position] = NULL;
-  return tokens;
+    }
+    tokens[i] = NULL;
+    return tokens;
 }

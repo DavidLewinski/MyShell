@@ -27,7 +27,7 @@ int main (int argc, char ** argv, char *envp[])
     if(argc == 2)
     {
         FILE *batchfile;
-        char c[100];
+        char batch[MAX_BUFFER];
 
         batchfile = fopen(argv[1], "r"); // open the batchfile
 
@@ -37,11 +37,11 @@ int main (int argc, char ** argv, char *envp[])
         }
         else
         {
-            while(fgets(c, sizeof(c), batchfile) != NULL) // while not at the end of the file
+            while(fgets(batch, MAX_BUFFER, batchfile) != NULL) // while not at the end of the file
             {
-                char ** command = split_line(c); // parse the line using the split_line function as if the command was taken from the shell prompt
-                execute(command); // run the execute function to run the commands on each line
-                printf("\n");
+                char ** command = split_line(batch); // parse the line using the split_line function as if the command was taken from the shell prompt
+                printf("-%s-\n", *command);    // show what command you are running
+                execute(command); // run the execute function to run the command
             }
         }
 
@@ -68,76 +68,13 @@ int main (int argc, char ** argv, char *envp[])
             // last entry will be NULL
             if (args[0] != NULL)
             {
-                // execute(args);
-                // continue;
-                // if there's anything there
-                /* check for internal/external command */
-                if (!strcmp(args[0],"cd"))
-                    {   // change directory command
-                        cd(args);
-                        continue;
-                    }
-
-                if (!strcmp(args[0],"clr"))
-                {   // clear terminal command
-                    clr();
-                    continue;
-                }
-
-                if (!strcmp(args[0],"dir"))
-                {   // list directory command
-                    dir();
-                    continue;
-                }
-
-                if (!strcmp(args[0],"environ"))
-                {   // get environment command
-                    environ(envp);
-                    continue;
-                }
-
-                if (!strcmp(args[0],"echo"))
-                {   // echo command
-                    echo(args);
-                    continue;
-                }
-
-                if (!strcmp(args[0], "help"))
-                {   // print readme file
-                    help();
-                    continue;
-                }
-
-                if (!strcmp(args[0], "pause"))
-                {   // pause shell command
-                    pause();
-                    continue;
-                }
-
-                if (!strcmp(args[0],"mkdir"))
-                {
-                    makedir(args);
-                    continue;
-                }
-
-                if (!strcmp(args[0],"quit"))   
-                {   // quit shell command
-                    quit();
-                    continue;
-                }
-                else
-                {   // if the command does not exist then print the following
-                    printf("Error, command \"%s\" not found.\n", args[0]);
-                    continue;
-                }
-
-                continue;
+                execute(args);
             }   // if no input command then continue
             else
             {
-                continue;
+                continue;   // if the command does not exist then continue
             }
-            continue;
+            continue;   // if enter key pressed just continue
         }
     }
 }

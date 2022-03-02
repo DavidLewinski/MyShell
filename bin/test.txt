@@ -1,4 +1,7 @@
+help
+environ
 cd ..
+environ
 echo lol
 lol
-
+quit
