@@ -24,7 +24,7 @@ int dir()
     system("ls -la");
 }
 
-int environ(char *envp[])
+int environ()
 {
     // looping through and printing all environment variables
     char cwd[MAX_BUFFER];
@@ -35,7 +35,7 @@ int environ(char *envp[])
     // {
     //     printf("\n%s", envp[i]);
     // }
-    // printf("\n");
+    printf("\n");
 }
 
 void echo(char *args[])
@@ -71,7 +71,7 @@ int makedir(char *args[])
     // else create a directory in the current directory with the given name
     else
     {
-        int check = mkdir(args[1], 777);
+        int check = mkdir(args[1], MAX_BUFFER);
 
         // check if the directory has been created
         if(check == 0)

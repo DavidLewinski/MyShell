@@ -41,10 +41,10 @@ void prompt()
     char* name = getenv("NAME");
     char* username = getenv("USER");
     getcwd(cwd, sizeof(cwd)); // gets the current working dir
-    printf("%s@%s:%s$ ", username, name, cwd); // prints the cwd then the prompt
+    printf("%s@%s:<%s> ", username, name, cwd); // prints the cwd then the prompt
 }
 
-int execute(char **args, char *envp[])
+int execute(char **args)
 {
     // if there's anything there
     /* check for internal/external command */
@@ -65,7 +65,7 @@ int execute(char **args, char *envp[])
 
     else if (!strcmp(args[0],"environ"))
     {   // get environment command
-        environ(envp);
+        environ();
     }
 
     else if (!strcmp(args[0],"echo"))
@@ -98,40 +98,6 @@ int execute(char **args, char *envp[])
         printf("Error, command \"%s\" not found.\n", args[0]);
     }
 }
-
-// char **split_line(char *line)
-// {
-//   int bufsize = 64, position = 0;
-//   char **tokens = malloc(MAX_BUFFER);
-//   char *token;
-
-//     if (!tokens)
-//     {
-//         fprintf(stderr, "lsh: allocation error\n");
-//         exit(EXIT_FAILURE);
-//     }
-
-//     token = strtok(line, SEPARATORS);
-//     while (token != NULL)
-//     {
-//         tokens[position] = token;
-//         position++;
-
-//         if (position >= bufsize)
-//         {
-//             bufsize += 64;
-//             tokens = realloc(tokens, bufsize * sizeof(char*));
-//             if (!tokens)
-//             {
-//                 fprintf(stderr, "lsh: allocation error\n");
-//                 exit(EXIT_FAILURE);
-//             }
-//         }
-//         token = strtok(NULL, SEPARATORS);
-//     }
-//     tokens[position] = NULL;
-//     return tokens;
-// }
 
 char **split_line(char *line)
 {

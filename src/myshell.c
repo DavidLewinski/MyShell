@@ -5,7 +5,7 @@
 #include <string.h>
 #include <sys/wait.h>
 #include "commands.h"
-#include "functions.h"
+#include "utility.h"
 
 #define MAX_BUFFER 1024                        // max line buffer
 #define MAX_ARGS 64                            // max # args
