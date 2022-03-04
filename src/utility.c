@@ -54,7 +54,7 @@ void prompt()
     int m = (t / 60) % 60;
     int s = t % 60;
     getcwd(cwd, sizeof(cwd)); // gets the current working dir
-    printf("╭─%s@%s: <%s> \n└──%02d:%02d:%02d: ", username, name, cwd, h, m, s); // prints the cwd then the prompt
+    printf("╭─ %s@%s %02d:%02d:%02d:\n└── <%s> ", username, name, h, m, s, cwd); // prints the cwd then the prompt
 }
 
 int execute(char **args)
