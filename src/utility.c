@@ -10,6 +10,11 @@
 #define MAX_ARGS 64
 #define SEPARATORS " \t\n"
 
+time_t getTime()
+{
+    return time(NULL);
+}
+
 void welcome() 
 {  
     printf("+---------------------------------------+"); 
@@ -24,11 +29,15 @@ void welcome()
     printf("\n|\t\t\t\t\t|");
     printf("\n+---------------------------------------+"); 
     char* username = getenv("USER"); 
-    time_t rawtime;
-    struct tm * timeinfo;
-    time ( &rawtime );
-    timeinfo = localtime ( &rawtime );
-    printf ("\nSystem time:     %s", asctime (timeinfo) ); 
+    // time_t rawtime;
+    // struct tm * t;
+    // time ( &rawtime );
+    // t = localtime ( &rawtime );
+    time_t t = getTime();
+    int h = (t / 3600) % 24;
+    int m = (t / 60) % 60;
+    int s = t % 60;
+    printf ("\nSystem time:     %02d:%02d:%02d", h, m, s);
     printf("\nUSER: @%s", username);
     printf("\nUse \"help\" to access the shell manual.");
     printf("\n\n");
@@ -40,8 +49,12 @@ void prompt()
     char cwd[MAX_BUFFER];
     char* name = getenv("NAME");
     char* username = getenv("USER");
+    time_t t = getTime();
+    int h = (t / 3600) % 24;  /* ### My problem. */
+    int m = (t / 60) % 60;
+    int s = t % 60;
     getcwd(cwd, sizeof(cwd)); // gets the current working dir
-    printf("%s@%s:<%s> ", username, name, cwd); // prints the cwd then the prompt
+    printf("╭─%s@%s: <%s> \n└──%02d:%02d:%02d: ", username, name, cwd, h, m, s); // prints the cwd then the prompt
 }
 
 int execute(char **args)
@@ -98,6 +111,7 @@ int execute(char **args)
         printf("Error, command \"%s\" not found.\n", args[0]);
     }
 }
+
 
 char **split_line(char *line)
 {

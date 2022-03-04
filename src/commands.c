@@ -62,7 +62,6 @@ int pause()
 // function that creates directories in current working directory
 int makedir(char *args[])
 {
-
     // if no dirname given print an error message
     if(args[1] == NULL)
     {

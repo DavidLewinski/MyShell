@@ -1,4 +1,4 @@
-clr
+.clr
 help
 environ
 cd
