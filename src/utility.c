@@ -15,8 +15,8 @@ time_t getTime()
     return time(NULL);
 }
 
-void welcome() 
-{  
+void welcome()
+{
     printf("+---------------------------------------+"); 
     printf("\n|");
     printf("\t\t\t\t\t|");
@@ -41,7 +41,7 @@ void welcome()
     printf("\nUSER: @%s", username);
     printf("\nUse \"help\" to access the shell manual.");
     printf("\n\n");
-    sleep(1); 
+    sleep(1);
 }
 
 void prompt()
@@ -50,11 +50,11 @@ void prompt()
     char* name = getenv("NAME");
     char* username = getenv("USER");
     time_t t = getTime();
-    int h = (t / 3600) % 24;  /* ### My problem. */
-    int m = (t / 60) % 60;
-    int s = t % 60;
+    int h = (t / 3600) % 24;    // hours in 24 hour time
+    int m = (t / 60) % 60;      // time in minutes
+    int s = t % 60;                 // time as seconds
     getcwd(cwd, sizeof(cwd)); // gets the current working dir
-    printf("╭─ %s@%s %02d:%02d:%02d:\n└── <%s> ", username, name, h, m, s, cwd); // prints the cwd then the prompt
+    printf("╭── %s@%s %02d:%02d:%02d\n└── <%s> ", username, name, h, m, s, cwd); // prints the cwd then the prompt
 }
 
 int execute(char **args)
@@ -73,7 +73,7 @@ int execute(char **args)
 
     else if (!strcmp(args[0],"dir"))
     {   // list directory command
-        dir();
+        dir(args);
     }
 
     else if (!strcmp(args[0],"environ"))
@@ -111,7 +111,6 @@ int execute(char **args)
         printf("Error, command \"%s\" not found.\n", args[0]);
     }
 }
-
 
 char **split_line(char *line)
 {

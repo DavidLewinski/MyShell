@@ -19,9 +19,23 @@ int clr()
     system("clear");
 }
 
-int dir()
+int dir(char *args[])
 {   // list all files and directories
-    system("ls -la");
+    char cwd[MAX_BUFFER], prevwd[MAX_BUFFER];
+    getcwd(cwd, sizeof(cwd));
+    getcwd(prevwd, sizeof(cwd));
+    if (args[1] != NULL)
+    {
+        int cd = chdir(args[1]);
+        if(cd<0)
+            printf("%s\n", cwd);
+            system("ls -la");
+            chdir(prevwd);
+    }
+    else
+    {
+        system("ls -la");
+    }
 }
 
 int environ()
@@ -49,7 +63,7 @@ void echo(char *args[])
 
 int help()
 {   // print the readme file in manual folder
-    system("cat ../manual/readme.md");
+    system("cat /manual/readme.md");
     printf("\n");
 }
 

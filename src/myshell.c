@@ -13,16 +13,21 @@
 
 int main (int argc, char ** argv, char *envp[])
 {
-    char buf[MAX_BUFFER];                      // line buffer
-    char * args[MAX_ARGS];                     // pointers to arg strings
-    char shell[0];                             // shell varible
-    char ** arg;                               // working pointer thru args
+    char buf[MAX_BUFFER];                         // line buffer
+    char manual[2][20] = {"", "../manual"};
+    char * args[MAX_ARGS];                        // pointers to arg strings
+    char shell[0], manual1[MAX_BUFFER];     // shell varible
+    char ** arg;                                            // working pointer through args
 
-    strcat(shell, getenv("PWD")); // get the current environment variable and set it as shell variable
-    strcat(shell, "/myshell"); // add both the shell variable and "/myshell"
-    setenv("SHELL", shell, 1); // set the old environment variable to new shell variable
+    strcat(shell, getenv("PWD"));   // get the current environment variable and set it as shell variable
+    // strcat(shell, "/MyShell");           // add both the shell variable and "/myshell"
+    setenv("SHELL", shell, 1);         // set the old environment variable to new shell variable
 
     welcome();
+
+    cd(manual);
+    getcwd(manual1, sizeof(MAX_BUFFER));
+    printf("%s\n", manual1);
 
     if(argc == 2)   // if there are 2 arguments when executing shell
     {   // run batchfile
@@ -76,7 +81,6 @@ int main (int argc, char ** argv, char *envp[])
     //     fclose(file2);
     // }
 
-
     /* keep reading input until "quit" command or eof of redirected input */
     while (!feof(stdin))
     { 
@@ -85,10 +89,11 @@ int main (int argc, char ** argv, char *envp[])
 
         prompt();
 
-        if (fgets(buf, MAX_BUFFER, stdin ))
+        if (fgets(buf, MAX_BUFFER, stdin))
         {
             // read a line
             /* tokenize the input into args array */
+
             arg = args;
             *arg++ = strtok(buf,SEPARATORS);   // tokenise input
 
