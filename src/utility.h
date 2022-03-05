@@ -1,4 +1,7 @@
 void welcome();
+// void grabmanual();
 void prompt();
-char **split_line(char *line);
-int execute(char **args);
+char **splitline(char *line);
+char execute(char **args);
+int hasampersand(char *args[]);
+int backgroundexecute(char **args);

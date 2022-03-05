@@ -13,21 +13,19 @@
 
 int main (int argc, char ** argv, char *envp[])
 {
-    char buf[MAX_BUFFER];                         // line buffer
-    char manual[2][20] = {"", "../manual"};
-    char * args[MAX_ARGS];                        // pointers to arg strings
-    char shell[0], manual1[MAX_BUFFER];     // shell varible
-    char ** arg;                                            // working pointer through args
+    char buf[MAX_BUFFER];                      // line buffer
+    char * args[MAX_ARGS];                     // pointers to arg strings
+    char shell[0];                             // shell varible
+    char ** arg;                               // working pointer thru args
 
-    strcat(shell, getenv("PWD"));   // get the current environment variable and set it as shell variable
-    // strcat(shell, "/MyShell");           // add both the shell variable and "/myshell"
-    setenv("SHELL", shell, 1);         // set the old environment variable to new shell variable
+    strcat(shell, getenv("PWD")); // get the current environment variable and set it as shell variable
+    // strcat(manual, getenv("PWD"));
+    strcat(shell, "/myshell"); // add both the shell variable and "/myshell"
+    setenv("SHELL", shell, 1); // set the old environment variable to new shell variable
 
+    // grabmanual();
     welcome();
-
-    cd(manual);
-    getcwd(manual1, sizeof(MAX_BUFFER));
-    printf("%s\n", manual1);
+    // printf("\n%s\n", manual);
 
     if(argc == 2)   // if there are 2 arguments when executing shell
     {   // run batchfile
@@ -40,7 +38,7 @@ int main (int argc, char ** argv, char *envp[])
         {
             while(fgets(batch, MAX_BUFFER, file) != NULL) // while not at the end of the file
             {
-                char ** command = split_line(batch); // parse the line using the split_line function as if the command was taken from the shell prompt
+                char ** command = splitline(batch); // parse the line using the split_line function as if the command was taken from the shell prompt
                 printf("-%s-\n", *command);    // show what command you are running
                 execute(command); // run the execute function to run the command
             }
@@ -52,34 +50,39 @@ int main (int argc, char ** argv, char *envp[])
 
         fclose(file); // close the file containing the commands
     }
-    // else if(argc == 3)   // if there are 3 arguments when executing shell
-    // {   // i/o redirect, reads from one input file and redirects the output to a second file
-    //     FILE *file1;
-    //     FILE *file2;
-    //     char batch[MAX_BUFFER];
 
-    //     file1 = fopen(argv[1], "r"); // open the file
-    //     file2 = fopen(argv[2], "w"); // open the file
+    else if(argc == 3)   // if there are 3 arguments when executing shell
+    {   // i/o redirect, reads from one input file and redirects the output to a second file
+        FILE *file1;
+        FILE *file2;
+        char batch[MAX_BUFFER];
 
-    //     if(file1 != NULL)
-    //     {
-    //         while(fgets(batch, MAX_BUFFER, file1) != NULL)      // while not at the end of the file
-    //         {
-    //             char ** command = split_line(batch);            // parse the line using the split_line function as if the command was taken from the shell prompt
-    //             fputs("TEST1\n", file2);
-    //             // fputs((fprintf("-%s-\n", *command)), file2);    // show what command you are running
-    //             // fputs((execute(command)), file2);               // run the execute function to run the command
-    //         }
-    //         printf("Successfully completed i/o redirect.\n");
-    //     }
-    //     else // if it is empty tell the user no commands are inputted
-    //     {
-    //         printf("Error: no commands supplied.");
-    //     }
+        file1 = fopen(argv[1], "r"); // open the file
+        file2 = fopen(argv[2], "w"); // open the file
 
-    //     fclose(file1); // close the file containing the commands
-    //     fclose(file2);
-    // }
+        if(file1 != NULL)
+        {
+            while(fgets(batch, MAX_BUFFER, file1) != NULL)      // while not at the end of the file
+            {
+                char ** command = splitline(batch);            // parse the line using the split_line function as if the command was taken from the shell prompt
+                // fputs("TEST1\n", file2);
+                fprintf(file2, "%s\n", *command);
+                // char *output = execute(command);
+                // fprintf(file2, "%s\n", output);
+                // fputs((printf("-%s-\n", *command)), file2);    // show what command you are running
+                // fputs((execute(command)), file2);               // run the execute function to run the command
+            }
+            printf("Successfully completed i/o redirect.\n");
+        }
+        else // if it is empty tell the user no commands are inputted
+        {
+            printf("Error: no commands supplied.");
+        }
+
+        fclose(file1); // close the file containing the commands
+        fclose(file2);
+    }
+
 
     /* keep reading input until "quit" command or eof of redirected input */
     while (!feof(stdin))
@@ -96,19 +99,26 @@ int main (int argc, char ** argv, char *envp[])
 
             arg = args;
             *arg++ = strtok(buf,SEPARATORS);   // tokenise input
-
             while((*arg++ = strtok(NULL,SEPARATORS)));
 
             // last entry will be NULL
             if (args[0] != NULL)
             {
-                execute(args);
-            }   // if no input command then continue
+                if (hasampersand(args) == 1)
+                {
+                    backgroundexecute(args);
+                    // sleep(1);
+                }
+                else if (hasampersand(args) == 0)
+                {
+                    execute(args);
+                }
+            }
             else
             {
                 continue;   // if the command does not exist then continue
             }
-            continue;   // if enter key pressed just continue
+            continue;       // if nothing inputted, continue
         }
     }
 }

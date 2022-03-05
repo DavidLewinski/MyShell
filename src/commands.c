@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
 
@@ -10,8 +11,8 @@ int cd(char *args[])
     char cwd[1024];
     getcwd(cwd, sizeof(cwd));
     int ch = chdir(args[1]);
-    if(ch<0)
-        printf("%s\n", cwd);
+    if(ch < 0)
+        printf("\n%s\n", cwd);
 }
 
 int clr()
@@ -22,20 +23,24 @@ int clr()
 int dir(char *args[])
 {   // list all files and directories
     char cwd[MAX_BUFFER], prevwd[MAX_BUFFER];
-    getcwd(cwd, sizeof(cwd));
-    getcwd(prevwd, sizeof(cwd));
-    if (args[1] != NULL)
+    getcwd(cwd, sizeof(cwd));       // gets the current working directory
+    getcwd(prevwd, sizeof(cwd));    // set previous working directory variable
+    if (args[1] != NULL)            // if there is a second argument
     {
-        int cd = chdir(args[1]);
-        if(cd<0)
-            printf("%s\n", cwd);
-            system("ls -la");
-            chdir(prevwd);
+        int cd = chdir(args[1]);    // will return -1 if no such directory
+        printf("\n");
+        if(cd > 0)                 // if the directory exists
+            printf("%s\n", cwd);    // print current working directory
+            system("ls -la");       // run the system ls command
+            chdir(prevwd);          // return to previous directory
+        if(cd == -1)                // if the directory does not exist
+            printf("\nError, no directory named \"%s\" found. Find list of all possible directories above.\n", args[1]);
     }
-    else
+    else                            // otherwise just run system ls
     {
         system("ls -la");
     }
+    // system("ls -la");
 }
 
 int environ()
@@ -45,10 +50,6 @@ int environ()
     getcwd(cwd, sizeof(cwd));
     setenv("PWD", cwd, 1);
     system("env");
-    // for(int i = 0; envp[i] != NULL; ++i)
-    // {
-    //     printf("\n%s", envp[i]);
-    // }
     printf("\n");
 }
 
@@ -63,8 +64,18 @@ void echo(char *args[])
 
 int help()
 {   // print the readme file in manual folder
-    system("cat /manual/readme.md");
-    printf("\n");
+    char manual[1000];
+    // strcat(manual, "cd ");
+    // strcat(manual, getenv("PWD"));
+    printf("\n%s\n", manual);
+    // chdir("../");
+    // chdir(manual);
+    // system("cd ..");
+    // strcat(manual, getenv("PWD"));
+    // system("cat ./readme.md")
+    // system("cd ../bin");
+    // system("cat ../manual/readme.md");
+    // printf("\n");
 }
 
 int pause()

@@ -1,6 +1,7 @@
 +---------------------------------------+
 |                                       |
-|            CA216 - MyShell            |
+|              MyShell v1.0             |
+|                                       |
 |         Name: Dawid Lewinski          |
 |       Student Number: 20466172        |
 |                                       |

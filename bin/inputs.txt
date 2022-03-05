@@ -1,8 +1,0 @@
-.clr
-help
-environ
-cd
-environ
-echo test
-test
-quit
