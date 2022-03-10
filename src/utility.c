@@ -1,3 +1,9 @@
+/*
+Name: Dawid Lewinski
+Student Number: 20466172
+I, Dawid Lewinski, acknowledge all of DCU's Academic Integrity Policies.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -8,7 +14,6 @@
 #include "commands.h"
 
 #define MAX_BUFFER 1024
-#define MAX_ARGS 64
 #define SEPARATORS " \t\n"
 
 time_t getTime()
@@ -18,14 +23,15 @@ time_t getTime()
 
 void welcome() 
 {  
-    printf("+---------------------------------------+\n"); 
+    printf("+---------------------------------------+\n");
     printf("|                                       |\n");
     printf("|              MyShell v1.0             |\n");
     printf("|                                       |\n");
     printf("|         Name: Dawid Lewinski          |\n");
     printf("|       Student Number: 20466172        |\n");
     printf("|                                       |\n");
-    printf("+---------------------------------------+\n"); 
+    printf("+---------------------------------------+\n");
+
     char* username = getenv("USER");
 
     time_t t = getTime();
@@ -35,20 +41,11 @@ void welcome()
 
     printf ("\n\nSystem time:    %02d:%02d:%02d", h, m, s); // printing the system time
     printf("\nWelcome,        @%s", username);              // welcomes the user
-    printf("\nUse \"help\" to access the shell manual.");   // informs user about help
+    printf("\nUse \"help\" to access the shell manual.");   // informs user about help manual
     printf("\n\n");
 
     sleep(1);
 }
-
-// void grabmanual()
-// {
-//     char manual[0];
-//     system("cd ../../manual");
-//     // strcat(manual, getenv("PWD"));
-//     help();
-//     system("cd ../bin");
-// }
 
 void prompt()
 {
@@ -56,10 +53,10 @@ void prompt()
     char* name = getenv("NAME");
     char* username = getenv("USER");
     time_t t = getTime();
-    int h = (t / 3600) % 24;  /* ### My problem. */
-    int m = (t / 60) % 60;
-    int s = t % 60;
-    getcwd(cwd, sizeof(cwd)); // gets the current working dir
+    int h = (t / 3600) % 24;    // time as hours
+    int m = (t / 60) % 60;      // time as minutes
+    int s = t % 60;             // time as seconds
+    getcwd(cwd, sizeof(cwd));   // gets the current working dir
     printf("\n╭── %s@%s %02d:%02d:%02d \n└── <%s> ", username, name, h, m, s, cwd); // prints the cwd then the prompt
 }
 
@@ -111,24 +108,25 @@ char execute(char **args)
     }
 
     else
-    {   // if the command does not exist then print the following
+    {   // if the command does not exist then print the following and run the command in system terminal
         printf("\nError, command \"%s\" not found. Running command in system shell.\n", args[0]);
+        system(*args);
     }
 }
 
-char **splitline(char *input)    // tokenize inputs
+char **splitline(char *input)           // tokenize inputs
 {
     char *token;
     char **tokens = malloc(MAX_BUFFER);
     int i = 0, MAXB = 64;
-    token = strtok(input, SEPARATORS);   // tokenize each input using the separators
+    token = strtok(input, SEPARATORS);  // tokenize each input using the separators
     for (i; token != NULL; ++i)
     {
-        tokens[i] = token;
+        tokens[i] = token;              // set current token at position i
 
-        if (i >= MAXB)
+        if (i >= MAXB)                  // if i is greater than or equal to the max size
         {
-            MAXB += 64; // increase buffer
+            MAXB += 64;                 // increase buffer
         }
     token = strtok(NULL, SEPARATORS);
     }
@@ -139,11 +137,11 @@ char **splitline(char *input)    // tokenize inputs
 int hasampersand(char *args[])
 {
     int count = 0;
-    for (int i = 1; args[i] != NULL; ++i)
+    for (int i = 1; args[i] != NULL; ++i)   // loops through all argument inputs until end is reached
     {
-        ++count;
+        ++count;                            // until the input reaches the end increment count
     }
-    if (!strcmp(args[count], "&"))
+    if (!strcmp(args[count], "&"))          // if the last input is an ampersand then
     {
     	return true;
     }
@@ -208,9 +206,8 @@ int backgroundexecute(char **args)
             printf("\nError, command \"%s\" not found. Running command in system shell.\n", args[0]);
         }
     }
-    else if (pid == -1)
+    else if(pid == -1)
     {
         printf("Error, fork failed.\n");
     }
-
 }

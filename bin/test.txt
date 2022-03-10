@@ -1,9 +1,0 @@
-cd
-cd ..
-cd
-cd ./bin
-cd
-dir
-dir ..
-echo test
-quit

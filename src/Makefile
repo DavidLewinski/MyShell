@@ -1,2 +1,2 @@
 make:
-	gcc -o ../bin/MyShell myshell.c commands.c utility.c
+	gcc -o ../bin/myshell myshell.c commands.c utility.c

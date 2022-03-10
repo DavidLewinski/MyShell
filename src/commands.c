@@ -1,3 +1,9 @@
+/*
+Name: Dawid Lewinski
+Student Number: 20466172
+I, Dawid Lewinski, acknowledge all of DCU's Academic Integrity Policies.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,12 +13,21 @@
 #define MAX_BUFFER 1024
 
 int cd(char *args[])
-{
-    char cwd[1024];
+{   // changes the current working directory to whatever the user inputs
+    char cwd[MAX_BUFFER];
     getcwd(cwd, sizeof(cwd));
-    int ch = chdir(args[1]);
-    if(ch < 0)
-        printf("\n%s\n", cwd);
+    if (args[1] == NULL)                // if there is no second argument then
+    {
+        printf("\n%s\n", cwd);          // print current working directory
+    }
+    else
+    {
+        int check = chdir(args[1]);     // check if the command worked
+        if (check == -1)                // if the command failed i.e returned a -1 then
+        {                               // print the following
+            printf("Error, could not find the path \"%s\".\n", args[1]);
+        }
+    }
 }
 
 int clr()
@@ -27,34 +42,33 @@ int dir(char *args[])
     getcwd(prevwd, sizeof(cwd));    // set previous working directory variable
     if (args[1] != NULL)            // if there is a second argument
     {
-        int cd = chdir(args[1]);    // will return -1 if no such directory
+        int check = chdir(args[1]); // will return -1 if no such directory
         printf("\n");
-        if(cd > 0)                 // if the directory exists
+        if(check > 0)               // if the directory exists
             printf("%s\n", cwd);    // print current working directory
             system("ls -la");       // run the system ls command
             chdir(prevwd);          // return to previous directory
-        if(cd == -1)                // if the directory does not exist
+        if(check == -1)             // if the directory does not exist
             printf("\nError, no directory named \"%s\" found. Find list of all possible directories above.\n", args[1]);
     }
     else                            // otherwise just run system ls
     {
         system("ls -la");
     }
-    // system("ls -la");
 }
 
 int environ()
 {
-    // looping through and printing all environment variables
+    // run system environment command
     char cwd[MAX_BUFFER];
     getcwd(cwd, sizeof(cwd));
-    setenv("PWD", cwd, 1);
+    setenv("PWD", cwd, 1);  // sets current working directory as PWD environment variable
     system("env");
     printf("\n");
 }
 
 void echo(char *args[])
-{
+{   // loop through inputs untill no more are found
     for (int i = 1; args[i] != NULL; ++i)
     {
         printf("%s ", args[i]);
@@ -63,24 +77,13 @@ void echo(char *args[])
 }
 
 int help()
-{   // print the readme file in manual folder
-    char manual[1000];
-    // strcat(manual, "cd ");
-    // strcat(manual, getenv("PWD"));
-    printf("\n%s\n", manual);
-    // chdir("../");
-    // chdir(manual);
-    // system("cd ..");
-    // strcat(manual, getenv("PWD"));
-    // system("cat ./readme.md")
-    // system("cd ../bin");
-    // system("cat ../manual/readme.md");
-    // printf("\n");
+{   // cat the readme file in manual folder
+    system("cat ../manual/readme.md");
 }
 
 int pause()
 {   // wait for a userinput
-    printf("Press Enter to unpause the shell...");
+    printf("Press the Enter key to unpause the shell...");
     getchar(); // wait for user to input enter
 }
 
@@ -100,7 +103,7 @@ int makedir(char *args[])
         // check if the directory has been created
         if(check == 0)
         {
-            printf("Created \"%s\" directory.\n", args[1]);
+            printf("Created a directory named, \"%s\".\n", args[1]);
         }
         else
         {
@@ -113,5 +116,3 @@ int quit()
 {   // exits the shell
     exit(0);
 }
-
-

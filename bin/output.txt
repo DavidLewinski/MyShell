@@ -1,9 +1,0 @@
-cd
-cd
-cd
-cd
-cd
-dir
-dir
-echo
-quit
