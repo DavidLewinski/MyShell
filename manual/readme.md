@@ -52,6 +52,12 @@ Here are all the possible commands available for this shell:
 
     quit    - This command will quit the shell environment and end the process.
 
+Enviornment Concept   - The environment variables are all updated to match the shell
+                        current environment. Variables such as SHELL is update to be
+                        current shell environment in the bin folder location. The PWD
+                        variable is also always updated to be the current working directory
+                        of the shell.
+
 Batchfile             - To run this you will have to be in the bin directory and run
                         the shell along with the batchfile like so, "./myshell batchfile.txt"
                         this will run all the command that are in the file and execute them 
@@ -72,8 +78,8 @@ I/O Redirection       - My shell somewhat supports this feature however, the pro
                         "./myshell < input.txt > output.txt".
 
 Background Execution  - The user can run a background command by simply writing any command
-                        they want with a "&" at the end of the input. Typing quit will exit the background execution.
-
+                        they want with a "&" at the end of the input. Typing quit will exit
+                        the background execution.
 
 Name: Dawid Lewinski
 Student Number: 20466172
