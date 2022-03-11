@@ -6,4 +6,5 @@ void echo();
 int help();
 int pause();
 int makedir();
+int removedir();
 int quit();

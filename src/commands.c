@@ -112,6 +112,31 @@ int makedir(char *args[])
     }
 }
 
+// function that removes directories in current working directory
+int removedir(char *args[])
+{
+    // if no dirname given print an error message
+    if(args[1] == NULL)
+    {
+        printf("Error, please provide a name for the directory.\n");
+    }
+    // else remove a directory in the current directory with the given name
+    else
+    {
+        int check = rmdir(args[1]);
+
+        // check if the directory has been removed
+        if(check == 0)
+        {
+            printf("Removed a directory named, \"%s\".\n", args[1]);
+        }
+        else
+        {
+            printf("Error, directory \"%s\" not found.\n", args[1]);
+        }
+    }
+}
+
 int quit()
 {   // exits the shell
     exit(0);

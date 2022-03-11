@@ -102,6 +102,11 @@ char execute(char **args)
         makedir(args);
     }
 
+    else if (!strcmp(args[0], "remdir"))
+    {   // removes a directory
+        removedir(args);
+    }
+
     else if (!strcmp(args[0], "quit"))   
     {   // quit shell command
         quit();
@@ -109,7 +114,7 @@ char execute(char **args)
 
     else
     {   // if the command does not exist then print the following and run the command in system terminal
-        printf("\nError, command \"%s\" not found. Running command in system shell.\n", args[0]);
+        printf("\nError, command \"%s\" not found. Running command in system shell.\n\n", args[0]);
         system(*args);
     }
 }
@@ -194,6 +199,11 @@ int backgroundexecute(char **args)
         else if (!strcmp(args[0], "mkdir"))
         {   // creates a directory
             makedir(args);
+        }
+
+        else if (!strcmp(args[0], "remdir"))
+        {   // removes a directory
+            removedir(args);
         }
 
         else if (!strcmp(args[0], "quit"))   
